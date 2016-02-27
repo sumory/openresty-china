@@ -1,0 +1,244 @@
+/* Animations */
+.animated {
+  -webkit-animation-duration: 0.5s;
+  animation-duration: 0.5s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both; }
+
+@-webkit-keyframes bounceIn {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(0.5); }
+  50% {
+    opacity: 1;
+    -webkit-transform: scale(1.5); }
+  70% {
+    -webkit-transform: scale(0.9); }
+  100% {
+    -webkit-transform: scale(1); } }
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5); }
+  50% {
+    opacity: 1;
+    transform: scale(1.5); }
+  70% {
+    transform: scale(0.9); }
+  100% {
+    transform: scale(1); } }
+.bounceIn {
+  -webkit-animation-name: bounceIn;
+  animation-name: bounceIn; }
+
+.subnav {
+  margin-bottom: -18px; }
+  .subnav .nav-tabs {
+    border-bottom: 0px;
+    padding-left: 20px; }
+  .subnav .nav-tabs > li > a:hover {
+    border-color: transparent;
+    background: none;
+    text-decoration: underline; }
+  .subnav .nav-tabs > .active > a, .subnav .nav-tabs > .active > a:hover {
+    color: #555555;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    cursor: default; }
+
+.node-topics td.title a:link,
+.node-topics td.title a:visited {
+  color: #2c64d7;
+  text-decoration: none; }
+.node-topics td.title a:hover {
+  text-decoration: underline; }
+.node-topics td.title em {
+  font-style: normal;
+  font-size: 12px;
+  color: #bbb; }
+.node-topics td.title i.icon {
+  margin-bottom: -1px; }
+.node-topics tr.head td {
+  border-top: none;
+  padding-top: 14px;
+  color: #CCC;
+  font-weight: bold;
+  font-size: 12px; }
+.node-topics tr.odd td {
+  background: #F9F9F9; }
+.node-topics tr.topic td.author {
+  width: 80px; }
+  .node-topics tr.topic td.author a {
+    color: #666;
+    font-weight: bold; }
+
+.recent-topics ul li .title {
+  font-size: 14px; }
+.recent-topics ul li i.icon {
+  margin-bottom: -1px; }
+.recent-topics ul li .info {
+  margin-top: 3px;
+  font-size: 12px;
+  color: #bbb; }
+.recent-topics ul li .node {
+  margin-right: 5px; }
+  .recent-topics ul li .node a {
+    color: #444; }
+
+.recent-replies li .title {
+  font-size: 14px; }
+  .recent-replies li .title .info {
+    font-size: 12px;
+    color: #bbb; }
+.recent-replies li .body {
+  margin-top: 6px;
+  color: #333; }
+  .recent-replies li .body a {
+    color: #333; }
+  .recent-replies li .body p {
+    font-size: 13px; }
+  .recent-replies li .body img {
+    max-width: 680px; }
+
+.row > .span13 {
+  margin-left: 0; }
+
+#main .userinfo h1 {
+  text-align: left;
+  display: inline; }
+
+.userinfo .tagline {
+  text-align: left;
+  margin-top: -8px;
+  margin-bottom: 20px; }
+.userinfo .media-right {
+  padding-left: 15px;
+  text-align: center; }
+  .userinfo .media-right .avatar {
+    margin-bottom: 10px; }
+.userinfo .list-group {
+  margin-bottom: 0px; }
+.userinfo li {
+  border-color: #f0f0f0;
+  font-size: 13px; }
+  .userinfo li label {
+    color: #999;
+    margin-right: 8px;
+    display: inline-block;
+    width: 80px;
+    text-align: right; }
+
+.bio {
+  font-size: 12px;
+  line-height: 180%; }
+  .bio p:last-child {
+    margin-bottom: 0; }
+
+.replies ul {
+  margin: 0; }
+  .replies ul h6 {
+    color: #999;
+    font-weight: normal; }
+  .replies ul li {
+    line-height: 180%;
+    border-bottom: 1px solid #ddd;
+    list-style: none; }
+  .replies ul blockquote {
+    line-height: 160%; }
+
+.content > .tabs {
+  border-bottom: 2px solid #ccc; }
+  .content > .tabs .active {
+    margin-bottom: 0; }
+
+table.node-topics td a {
+  color: #333;
+  font-weight: normal; }
+table.node-topics td.replied-at {
+  width: 80px; }
+
+.user-list h2 {
+  font-size: 14px;
+  margin: 0; }
+.user-list .user {
+  text-align: center;
+  margin-bottom: 20px;
+  overflow: hidden; }
+  .user-list .user .avatar {
+    margin-bottom: 5px; }
+    .user-list .user .avatar img {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto; }
+  .user-list .user .name a {
+    color: #333; }
+
+.bloced-users .item {
+  text-align: left;
+  margin-bottom: 10px; }
+  .bloced-users .item .media-object {
+    display: inline; }
+
+.sidebar .profile .avatar .level {
+  margin-top: 6px;
+  text-align: center; }
+.sidebar .profile .item {
+  margin-bottom: 5px; }
+.sidebar .profile .item a {
+  color: #666; }
+.sidebar .profile .number {
+  color: #999; }
+.sidebar .profile .counts {
+  color: #999; }
+  .sidebar .profile .counts span {
+    color: #666; }
+.sidebar .profile .follow-info {
+  border-top: 1px solid #f0f0f0;
+  text-align: center;
+  margin-top: 15px;
+  padding-top: 15px; }
+  .sidebar .profile .follow-info a {
+    display: block;
+    text-decoration: none; }
+  .sidebar .profile .follow-info a.counter {
+    font-size: 32px;
+    color: #356DD0; }
+    .sidebar .profile .follow-info a.counter:hover {
+      color: #317DDA; }
+  .sidebar .profile .follow-info a.text {
+    color: #999; }
+.sidebar .profile .buttons {
+  border-top: 1px solid #f0f0f0;
+  margin-top: 15px;
+  padding-top: 15px; }
+
+.user-card {
+  margin-bottom: 15px; }
+  .user-card .media-heading {
+    font-weight: bold; }
+    .user-card .media-heading a {
+      color: #333; }
+  .user-card .infos {
+    color: #999;
+    font-size: 12px; }
+    .user-card .infos .item {
+      margin-top: 5px; }
+
+#user_github_repos .more {
+  text-align: right; }
+#user_github_repos ul {
+  margin: 0; }
+#user_github_repos li .title {
+  position: relative; }
+  #user_github_repos li .title a {
+    color: #333;
+    font-weight: bold; }
+  #user_github_repos li .title .watchers {
+    position: absolute;
+    top: 2px;
+    right: 0; }
+#user_github_repos li .desc {
+  font-size: 12px;
+  color: #888; }
+

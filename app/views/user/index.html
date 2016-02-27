@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OpenResty China社区 &raquo; {{user.username}}</title>
+  {(meta.html)}
+
+</head>
+<body>
+{(header.html)}
+
+<div id="main" class="main-container container">
+    <div class="row">
+        <div class="sidebar col-md-4" id="sidebar">
+            <div class="panel profile panel-default">
+                <div class="panel-body">
+                    <div class="media">
+                        <div class="avatar media-left">
+                            <div class="image">
+                                <img class="media-object avatar-120" src="/static/avatar/{{user.avatar}}" alt="2">
+                            </div>
+
+                            {% if user.is_admin==1 then %}
+                            <div class="level"><span class="label label-danger role">管理员</span></div>
+                            {% else %}
+                            <div class="level"><span class="label label-success role">会员</span></div>
+                            {% end%}
+                        </div>
+                        <div class="media-body">
+                            <div class="item">
+                                <span style="font-size:20px;">{{user.username}}</span>
+                                <span class="opts pull-right"></span>
+                            </div>
+                            <div class="item"> 
+                                <span title="注册日期">{{user.create_time}}</span>
+                            </div>
+                            <div class="item"> 
+                                <span title="所在地">{{user.city}}</span>
+                            </div>
+
+                            {% if is_self then %}
+
+                            {% else %}
+                            <div class="item" id="relation-op-area">  
+                               
+                                    {% if relation == 0 then %}
+                                        <a class="btn btn-primary btn-tiny follow-btn" data-toid="{{user.id}}" data-op="follow" data-relation="{{relation}}" href="javascript:void(0)" style="color:#fff">
+                                            <i class="fa fa-user"></i>
+                                            <span>关注</span>
+                                        </a>
+                                    {% elseif relation == 1  then %} 
+                                        
+                                        <a class="btn btn-primary btn-tiny follow-btn" data-toid="{{user.id}}" data-op="unfollow" data-relation="{{relation}}" href="javascript:void(0)" style="color:#fff">
+                                            <i class="fa fa-user"></i>
+                                            <span>取消关注</span>
+                                        </a>
+                                        <span>已关注</span>
+                                    {% elseif relation == 2  then %} 
+                                        <a class="btn btn-primary btn-tiny follow-btn" data-toid="{{user.id}}" data-op="follow" data-relation="{{relation}}" href="javascript:void(0)" style="color:#fff">
+                                            <i class="fa fa-user"></i>
+                                            <span>关注</span>
+                                        </a>
+                                        <span>ta关注了我</span>
+                                    {% elseif relation == 3  then %} 
+                                        <a class="btn btn-primary btn-tiny follow-btn" data-toid="{{user.id}}" data-op="unfollow" data-relation="{{relation}}" href="javascript:void(0)" style="color:#fff">
+                                            <i class="fa fa-user"></i>
+                                            <span>取消关注</span>
+                                        </a>
+                                        <span>互相关注</span>
+                                    {% end%}
+                            </div>
+                            {% end%}
+                        </div>
+                    </div>
+                    <div class="follow-info row">
+                        <div class="col-sm-4 sidebar-fans">
+                            <a class="counter" href="javascript:void(0);" id="fans-count">{{fans_count}}</a>
+                            <a class="text" href="javascript:void(0);">粉丝</a>
+                        </div>
+                        <div class="col-sm-4 sidebar-follows">
+                            <a class="counter" href="javascript:void(0);" id="follows-count">{{follows_count}}</a>
+                            <a class="text" href="javascript:void(0);">关注</a>
+                        </div>
+                        <div class="col-sm-4 sidebar-topics">
+                            <a class="counter" href="javascript:void(0);">{{topics_count}}</a>
+                            <a class="text" href="javascript:void(0);">文章</a>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+            
+        </div>
+        <div class="col-md-8">
+      
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#user-info-tab" data-toggle="tab">个人信息</a></li>
+                    <li><a id="btn-show-topics" href="#user-topics-tab" data-toggle="tab">文章</a></li>
+                    <li><a id="btn-show-comments" href="#user-comments-tab" data-toggle="tab">评论</a></li>
+                    <li><a id="btn-show-collects" href="#user-collects-tab" data-toggle="tab">收藏</a></li>
+                    <li><a id="btn-show-follows" href="#user-follows-tab" data-toggle="tab">关注</a></li>
+                    <li><a id="btn-show-fans" href="#user-fans-tab" data-toggle="tab">粉丝</a></li>
+                </ul>
+                <div class="tab-content user-index-tab-content">
+                    <div class="tab-pane active" id="user-info-tab">
+                        <div class="panel panel-default userinfo">
+                            <div class="panel-body vcard clearfix">
+                                <ul class="list-group">
+                                    <li class="adr list-group-item">
+                                        <label>公司:</label> <span class="org">{{user.company}}</span>
+             
+                                    </li>
+
+                                    {% if user.email_public==1 then %}
+                                    <li class="list-group-item">
+                                        <label>Email:</label> <span><a href="mailto:huacnlee@gmail.com">{{user.email}}</a></span>
+                                    </li>
+                                    {%end%}
+                                    <li class="list-group-item">
+                                        <label><span class="translation_missing" title="github">Github</span>:</label> <span><a class="twitter" rel="nofollow" href="https://github.com/{{user.github}}">{{user.github}}</a></span>
+             
+                                    </li>
+                                    <li class="list-group-item">
+                                        <label>website:</label> <span><a target="_blank" class="url" rel="nofollow" href="{{user.website}}">{{user.website}}</a></span>
+             
+                                    </li>
+                                    <li class="list-group-item">
+                                        <label>签名:</label> <span>{{user.sign}}</span>
+             
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="user-topics-tab">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="tab-body" id="topics-body"></div><!-- topics -->  
+                            </div>
+                            <div class="panel-footer">
+                                <div class="tab-pagebar" id="topics-pagebar"></div><!-- page bar -->  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="user-comments-tab">
+                        <div class="panel panel-default">
+                            <div class="panel-body ">
+                                <div class="tab-body" id="comments-body"></div><!-- comments -->  
+                            </div>
+                            <div class="panel-footer">
+                                <div class="tab-pagebar" id="comments-pagebar"></div><!-- page bar -->  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="user-collects-tab">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="tab-body" id="collects-body"></div><!-- collects -->  
+                            </div>
+                            <div class="panel-footer">
+                                <div class="tab-pagebar" id="collects-pagebar"></div><!-- page bar -->  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="user-follows-tab">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="tab-body" id="follows-body"></div><!-- follows -->  
+                            </div>
+                            <div class="panel-footer">
+                                <div class="tab-pagebar" id="follows-pagebar"></div><!-- page bar -->  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="user-fans-tab">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="tab-body" id="fans-body"></div><!-- fans -->  
+                            </div>
+                            <div class="panel-footer">
+                                <div class="tab-pagebar" id="fans-pagebar"></div><!-- page bar -->  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#user-hot-topics-tab" data-toggle="tab" id="btn-show-hot-topics">热门文章</a>
+                    </li>
+                    <li><a href="#user-like-topics-tab" data-toggle="tab" id="btn-show-like-topics">最近喜欢</a>
+                    </li>
+                </ul>
+                <div class="tab-content user-index-tab-content">
+                    <div class="tab-pane active" id="user-hot-topics-tab">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="tab-body" id="hot-topics-body"></div><!-- topics -->  
+                            </div>
+                            <div class="panel-footer" style="display: none">
+                                <div class="tab-pagebar" id="hot-topics-pagebar"></div><!-- page bar -->  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="user-like-topics-tab">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="tab-body" id="like-topics-body"></div><!-- topics -->  
+                            </div>
+                            <div class="panel-footer" style="display: none">
+                                <div class="tab-pagebar" id="like-topics-pagebar"></div><!-- page bar -->  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{(footer.html)}
+
+<script id="topic-item-tpl" type="text/template">
+    <ul class="list-group">
+        {@each topics as t}
+        <li class="list-group-item" id="topic-li-${t.id}">
+            <div class="title"> 
+                <a title="${t.title}" href="/topic/${t.id}/view">${t.title}</a>
+                {@if t.is_good==1 }
+                    <i title="精华帖" class="fa fa-diamond"></i>
+                {@/if}
+                &nbsp;&nbsp;
+                {@if is_self }
+                    <a href="/topic/${t.id}/edit" class="edit-topic" style="color:#000"><i title="编辑该文章" class="fa fa-pencil"></i></a>&nbsp;
+                    <a href="javascript:void(0)" class="delete-topic" data-id="${t.id}" style="color:#FF6969"><i title="删除" class="fa fa-trash"></i></a>
+                {@/if}
+            </div>
+            <div class="info"> 
+                <span class="counter">
+                ${t.create_time} 发布在
+                <span class="node"><a class="node" href="/category/${t.category_id}">${t.category_name}</a></span>
+                 • 
+                <span class="counter"> ${t.like_num} 个赞 | ${t.reply_num} 条评论</span>
+
+                {@if t.last_reply_id!="0"}
+                      • 最后由 <a href="/user/${t.last_reply_name}/index">${t.last_reply_name}</a> 于 ${t.last_reply_time} 回复
+                {@/if}
+                </span>
+            </div>
+        </li>
+        {@/each}
+    </ul>
+</script>
+
+<script id="comment-item-tpl" type="text/template">
+    <ul class="list-group">
+        {@each comments as c}
+        <li class="list-group-item" id="comment-li-${c.comment_id}">
+            <div class="title"> 
+                <a title="${c.topic_title}" href="/topic/${c.topic_id}/view">${c.topic_title}</a>
+
+                <span class="counter">
+                    评论于 ${c.comment_time} 
+                </span>
+                &nbsp;&nbsp;
+                {@if is_self }
+                    <a href="javascript:void(0)" class="delete-comment" data-id="${c.comment_id}" style="color:#FF6969"><i title="删除" class="fa fa-trash"></i></a>
+                {@/if}
+            </div>
+            <div class="info markdown" style="color:#555;" id="reply_${c.comment_id}"> 
+                   $${c.comment_content} 
+            </div>
+        </li>
+        {@/each}
+    </ul>
+</script>
+
+<script id="collect-item-tpl" type="text/template">
+    <ul class="list-group">
+        {@each topics as t}
+        <li class="list-group-item">
+            <div class="title"> 
+                <a title="${t.title}" href="/topic/${t.id}/view">${t.title}</a>
+                {@if t.is_good==1 }
+                    <i title="精华帖" class="fa fa-diamond"></i>
+                {@/if}
+            </div>
+            <div class="info"> 
+                <span class="counter">
+                <a href="/user/${t.user_name}/index">${t.user_name}</a> 于 ${t.create_time} 发布在
+                <span class="node"><a class="node" href="/category/${t.category_id}">${t.category_name}</a></span>
+                 • 
+                <span class="counter"> ${t.like_num} 个赞 | ${t.reply_num} 条评论</span>
+                {@if t.last_reply_id!="0"}
+                      • 最后由 <a href="/user/${t.last_reply_name}/index">${t.last_reply_name}</a> 于 ${t.last_reply_time} 回复
+                {@/if}
+                </span>
+            </div>
+        </li>
+        {@/each}
+    </ul>
+</script>
+
+<script id="follow-item-tpl" type="text/template">
+    <div class="row">
+        {@each users as u}
+        <div class="col-xs-4" style="min-width: 100px;">
+            <div class="media user-card">
+                <div class="media-left">
+                    <a href="/user/${u.username}/index">
+                        <img class="media-object avatar-48" src="/static/avatar/${u.avatar}" alt="2">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <div class="media-heading">
+                        <a href="/user/${u.username}/index">${u.username}</a> 
+                    </div>
+                    {@if u.city || u.github}
+                        <div class="infos">
+                            <div class="item">
+                                {@if u.city}
+                                    ${u.city}
+                                {@/if}
+                                {@if u.github}
+                                • <i class="fa fa-github"></i> <a href="https://github.com/${u.github}">${u.github}</a>
+                                {@/if}
+                            </div>
+                        </div>
+                    {@/if}
+                </div>
+            </div>
+        </div>
+       {@/each} 
+    </div>
+</script>
+
+<script id="fan-item-tpl" type="text/template">
+    <div class="row">
+        {@each users as u}
+        <div class="col-xs-4" style="min-width: 100px;">
+            <div class="media user-card">
+                <div class="media-left">
+                    <a href="/user/${u.username}/index">
+                        <img class="media-object avatar-48" src="/static/avatar/${u.avatar}" alt="2">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <div class="media-heading">
+                        <a href="/user/${u.username}/index">${u.username}</a> 
+                    </div>
+                    {@if u.city || u.github}
+                        <div class="infos">
+                            <div class="item">
+                                {@if u.city}
+                                    ${u.city}
+                                {@/if}
+                                {@if u.github}
+                                • <i class="fa fa-github"></i> <a href="https://github.com/${u.github}">${u.github}</a>
+                                {@/if}
+                            </div>
+                        </div>
+                    {@/if}
+                </div>
+            </div>
+        </div>
+       {@/each} 
+    </div>
+</script>
+
+<script id="relation-op-area-tpl" type="text/template">
+    <a class="btn btn-primary btn-tiny follow-btn" data-toid="${user_id}" data-op="${op}" data-relation="${relation}" href="javascript:void(0)" style="color:#fff">
+        <i class="fa fa-user"></i>
+        <span>${text}</span>
+    </a>
+    <span>${relation_text}</span>
+</script>
+
+
+<script id="hot-topic-item-tpl" type="text/template">
+    <ul class="list-group">
+        {@each topics as t}
+        <li class="list-group-item">
+            <div class="title"> 
+                <a title="${t.title}" href="/topic/${t.id}/view">${t.title}</a>
+                {@if t.is_good==1 }
+                    <i title="精华帖" class="fa fa-diamond"></i>
+                {@/if}
+            </div>
+            <div class="info"> 
+                <span class="counter">
+                ${t.create_time} 发布在
+                <span class="node"><a class="node" href="/category/${t.category_id}">${t.category_name}</a></span>
+                 • 
+                <span class="counter"> ${t.like_num} 个赞 | ${t.reply_num} 条评论</span>
+
+                {@if t.last_reply_id!="0"}
+                      • 最后由 <a href="/user/${t.last_reply_name}/index">${t.last_reply_name}</a> 于 ${t.last_reply_time} 回复
+                {@/if}
+                </span>
+            </div>
+        </li>
+        {@/each}
+    </ul>
+</script>
+
+<script id="like-topic-item-tpl" type="text/template">
+    <ul class="list-group">
+        {@each topics as t}
+        <li class="list-group-item">
+            <div class="title"> 
+                <a title="${t.title}" href="/topic/${t.id}/view">${t.title}</a>
+                {@if t.is_good==1 }
+                    <i title="精华帖" class="fa fa-diamond"></i>
+                {@/if}
+            </div>
+            <div class="info"> 
+                <span class="counter">
+                <a href="/user/${t.user_name}/index">${t.user_name}</a> 于 ${t.create_time} 发布在
+                <span class="node"><a class="node" href="/category/${t.category_id}">${t.category_name}</a></span>
+                 • 
+                <span class="counter"> ${t.like_num} 个赞 | ${t.reply_num} 条评论</span>
+                {@if t.last_reply_id!="0"}
+                      • 最后由 <a href="/user/${t.last_reply_name}/index">${t.last_reply_name}</a> 于 ${t.last_reply_time} 回复
+                {@/if}
+                </span>
+            </div>
+        </li>
+        {@/each}
+    </ul>
+</script>
+
+<script src="/static/js/user_index.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        APP.Common.resetNav();
+        APP.UserIndex.init("{{user.username}}");
+    });
+</script>
+</body>
+</html>

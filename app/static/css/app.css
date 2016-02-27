@@ -1,0 +1,143 @@
+.not-mark{
+	background-color: #F7F6E3;
+}
+#notifications .notification {
+		padding: 10px 5px 10px 5px;
+		margin:0;
+}
+
+#notification-area .red-color{
+	color:#EB5424;
+}
+
+#main{
+	min-height:450px;
+}
+
+.copyright{
+	font-size: 12px;
+		margin-top: 5px;
+}
+
+#topics-body .topic:last-child{
+	margin-bottom:10px;
+}
+
+#notifications .panel-heading{
+	height: 56px;
+}
+
+#notifications .btn{
+	border:none;
+}
+
+.tab-body{
+	/*min-height:200px;*/
+	padding-bottom: 10px;
+}
+
+
+#replies .alert{
+	  margin-top: 10px;
+}
+
+#replies .reply .info {
+  margin-bottom: 8px;
+}
+
+.avatar-96 {
+	width:96px;
+	height:96px;
+}
+
+.avatar-64 {
+	width:64px;
+	height:64px;
+}
+
+.label-success, .label-danger, .label-info {
+	color:#fff;
+	padding: 2px 8px;
+		border-radius: 8px;
+}
+
+#avatar_upload_progress_bar{
+	width:140px;
+	margin:0 auto;
+}
+
+a.btn-tiny {
+	padding: 0 8px;
+    font-size: 12px;
+    height: 24px;
+    line-height: 24px;
+    color: #fff;
+}
+
+
+/* user-index page start*/
+#relation-op-area span{
+	font-size:12px;
+}
+
+.user-index-tab-content .tab-body {
+	
+	margin-top: 3px;
+    font-size: 12px;
+    color: #bbb;
+}
+
+.user-index-tab-content .tab-body a{
+	color:#555;
+}
+
+
+.user-index-tab-content .title{
+	margin-top:5px;
+	margin-bottom:5px;
+}
+
+.user-index-tab-content .title a{
+	color: #356DD0;
+	font-size:14px;
+}
+
+
+.user-index-tab-content .list-group-item{
+	border-radius: 0px;
+	border-left:none;
+	border-right:none;
+}
+
+.user-index-tab-content .list-group-item:first-child {
+    margin-top: -4px;
+    border-top:none;
+}
+
+.user-index-tab-content .list-group-item:last-child {
+    border-bottom:none;
+}
+
+.user-index-tab-content .pagination2{
+	font-size:12px;
+	height: 30px;
+	padding: 0 0;
+}
+
+.user-index-tab-content .pagination2 div{
+	margin-right:0px;
+}
+
+.user-index-tab-content .pagination2 .page-btn{
+	margin-right:0px;
+	margin-left:5px;
+}
+
+/* user-index page stop*/
+
+#avatar_show {
+	height:140px;
+	width:140px;
+	margin-top:10px;
+	margin-bottom:8px;
+}

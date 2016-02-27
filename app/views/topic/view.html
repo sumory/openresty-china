@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OpenResty China社区 &raquo;</title>
+  {(meta.html)}
+    <link rel="stylesheet" media="screen" href="/static/css/jquery.fileupload.css"/>
+    <link rel="stylesheet" media="screen" href="/static/css/jquery.fileupload-ui.css"/>
+</head>
+<body>
+{(header.html)}
+
+
+
+<div id="main" class="main-container container">
+    <div class="row">
+        <div class="col-md-9">
+            <div id="topic-body" class="topic-detail panel panel-default" style="display:none;">
+            </div><!-- topic body stop -->
+
+
+            <!--评论-->
+            <div id="replies" class="panel panel-default" style="display:none;">
+                <div class="total panel-heading">
+                    共收到
+                    <b class="reply-num-text total-comment-count">
+                       0
+                    </b>
+                    条评论
+                </div>
+                <div class="items panel-body">
+                    <div id="comments-body"></div><!-- comments -->  
+                    <div class="panel-footer clearfix" id="comment-pagebar" style="display:none;"></div><!-- page bar -->  
+                </div>
+            </div>
+            <div id="reply" class="panel panel-default"  style="display:none;">
+                <div class="panel-heading">
+                    评论
+                </div>
+                <div class="panel-body">
+                    <div class="editor-toolbar">
+                        <div class="opts pull-right"><!--上传文件-->
+                            <span class="fileinput-button">
+                                 <i class="fa fa-fa fa-image"></i>
+                                <input type="file" id="upload_image"  multiple="">
+                            </span>
+                        </div>
+                        <ul class="nav nav-pills" style="clear:none;">
+                            <li class="edit active">
+                                <a id="reply-edit-btn" href="javascript:void(0);">编辑</a>
+                            </li>
+                            <li class="preview">
+                                <a id="reply-preview-btn" href="javascript:void(0);">预览</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <form class="new_reply" id="new_reply">
+                        <input name="utf8" type="hidden" value="✓">
+                        <div class="form-group">
+                            <div class="topic-editor-dropzone dz-clickable" id="edit-area">
+                                <textarea class="topic-editor form-control" rows="4" tabindex="1" id="reply_content" style="height: auto;min-height:80px;"></textarea>
+                            </div>
+
+                            <div class="markdown form-control" id="preview-area" style="display:none;height:auto;border:1px solid #ddd;padding:20px 20px;"></div>
+                    
+                        </div>
+                        <div class="submit-buttons">
+                            <a id="reply-btn" class="btn btn-primary" tabindex="2">
+                                提交评论
+                            </a>
+
+                            <span class="help-inline" style="padding-left:10px;font-size:12px;" id="mention-area">
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- right -->
+        <div class="sidebar hidden-mobile col-md-3">
+            <div id="topic-sidebar">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <a href="#" class="btn btn-block btn-move-page" data-type="top">
+                            <i class="fa fa-arrow-up">
+                            </i>
+                        </a>
+                        <div class="buttons" style="height:142px;" id="ops-area">
+                            <!--右侧操作区域-->
+                        </div>
+                        <hr>
+                        <div class="reply-buttons">
+                            <div class="total">
+                                共收到
+                                <b class="reply-num-text total-comment-count">
+                                    0
+                                </b>
+                                条评论
+                            </div>
+                            <a href="#reply" class="btn btn-success btn-block btn-focus-reply">
+                                参与评论
+                            </a>
+                        </div>
+                        <hr>
+                        <div class="group opts">
+                        </div>
+                        <a href="#footer" class="btn btn-block btn-move-page" data-type="bottom">
+                            <i class="fa fa-arrow-down">
+                            </i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="ops-area-tpl" type="text/template">
+    <div class="group likes opts">
+        {@if meta.is_like }
+            <a title="赞" id="like-btn" data-id="${topic.id}" data-op="cancel_like" class="likeable active" href="javascript:void(0);">
+                <i class="fa fa-thumbs-up"></i>
+                <span class="like-num-text">${topic.like_num}</span> 个赞
+            </a>
+        {@/if}
+
+        {@if !meta.is_like }
+            <a title="赞" id="like-btn" data-id="${topic.id}" data-op="like" class="likeable " href="javascript:void(0);">
+                <i class="fa fa-thumbs-up"></i>
+                <span class="like-num-text">${topic.like_num}</span> 个赞
+            </a>
+        {@/if}
+    </div>
+    <div class="group">
+        <div class="btn-group" role="group">
+            {@if meta.is_collect }
+                <a title="收藏" id="collect-btn" class="bookmark active btn btn-default" data-op="cancel_collect" data-id="${topic.id}" href="javascript:void(0);">
+                    <i class="fa fa-bookmark"></i> 收藏
+                </a>
+            {@/if}
+
+            {@if !meta.is_collect }
+                <a title="收藏" id="collect-btn" class="bookmark  btn btn-default" data-op="collect" data-id="${topic.id}" href="javascript:void(0);">
+                    <i class="fa fa-bookmark"></i> 收藏
+                </a>
+            {@/if}
+        </div>
+    </div>
+</script>
+
+<script id="topic-body-tpl" type="text/template">
+    <div class="panel-heading media clearfix">
+        <div class="media-body">
+            <h1 class="media-heading">
+                ${topic.title}
+            </h1>
+            <div class="info">
+                <a class="node" href="/category/${topic.category_id}">
+                    ${topic.category_name}
+                </a>
+                ·
+                <a data-author="true" data-name="${topic.user_name}" href="/user/${topic.user_name}/index">
+                    ${topic.user_name}
+                </a>
+                 于
+                <abbr class="timeago" title="${topic.create_time}">
+                    ${topic.create_time}
+                </abbr>
+                发布
+                {@if topic.update_time }
+                    ·
+                    <abbr class="timeago" title="${topic.create_time}">
+                        ${topic.update_time} 更新
+                    </abbr>
+                {@/if}
+
+                 {@if topic.last_reply_id!=0 }
+                    · 最后由
+                    <a data-name="shawnqi" href="/user/${topic.last_reply_name}/index">
+                        ${topic.last_reply_name}
+                    </a>
+                    于
+                    <abbr class="timeago" title="${topic.last_reply_time}">
+                        ${topic.last_reply_time}
+                    </abbr>
+                    回复
+                {@/if}
+
+                · ${topic.view_num}次阅读
+                &nbsp;
+                {@if is_self}
+                    <a href="/topic/${topic.id}/edit" class="edit-topic" style="color:#000"><i title="编辑该文章" class="fa fa-pencil"></i></a>&nbsp;
+                    <a href="javascript:void(0)" class="delete-topic" data-id="${topic.id}" style="color:#FF6969"><i title="删除此文章" class="fa fa-trash"></i></a>
+                {@/if}
+            </div>
+        </div>
+        <div class="avatar media-right">
+            <a href="/user/${topic.user_name}/index" title="${topic.user_name}">
+                <img class="media-object avatar-48" src="/static/avatar/${topic.avatar}"
+                alt="2">
+            </a>
+        </div>
+    </div>
+    <div class="panel-body markdown">
+        <article id="article-content">
+            $${topic.content}
+        </article>
+    </div>
+
+    <div class="panel-footer clearfix">
+        <div class="opts" style="font-size: 12px;">
+            <span title="赞" class="likeable " href="javascript:void(0);">
+                <i class="fa fa-thumbs-up"></i>
+                <span class="like-num-text">${topic.like_num}</span> 个赞
+            </span>
+            &nbsp;
+            <span title="收藏" class="bookmark " href="javascript:void(0);">
+                <i class="fa fa-bookmark"></i>
+                <span id="collect-num-text">${topic.collect_num}</span> 收藏
+            </span>
+        </div>
+    </div>
+</script>
+
+<script id="comment-item-tpl" type="text/template">
+    {@each comments as c, index}
+    <div class="reply" data-id="${c.id}" id="reply_${c.id}">
+        <div class="avatar">
+            <a href="/user/${c.user_name}/index">
+                <img class="media-object avatar-48" src="/static/avatar/${c.avatar}"/>
+            </a>
+        </div>
+        <div class="infos">
+            <div class="info">
+                <span class="name">
+                    <a href="/user/${c.user_name}/index">
+                        ${c.user_name}
+                    </a>
+                </span>
+                ·
+                <span class="time">
+                    <a class="reply-floor" href="#reply_${c.id}">
+                        #${parseInt(base)+parseInt(index)+1}
+                    </a>
+                    ·
+                    <abbr class="timeago">
+                        ${c.create_time}
+                    </abbr>
+                    &nbsp;
+
+                    {@if current_user_id==c.user_id }
+                        <a href="javascript:void(0)" class="delete-comment" data-id="${c.id}" style="color:#FF6969"><i title="删除此评论" class="fa fa-trash"></i></a>
+                    {@/if}
+                </span>
+                <span class="opts pull-right">
+                    <a title="回复此楼" class="btn-reply fa fa-mail-reply reply_to_this" data-name="${c.user_name}" href="javascript:void(0);"></a>
+                </span>
+            </div>
+            <div class="markdown">
+                $${c.content}
+            </div>
+        </div>
+    </div>
+    {@/each}
+</script>
+
+<script id="single-comment-item-tpl" type="text/template">
+    <div class="reply" data-id="${c.id}" id="reply_${c.id}">
+        <div class="avatar">
+            <a href="/user/${c.user_name}/index">
+                <img class="media-object avatar-48" src="/static/avatar/${c.avatar}"/>
+            </a>
+        </div>
+        <div class="infos">
+            <div class="info">
+                <span class="name">
+                    <a href="/user/${c.user_name}/index">
+                        ${c.user_name}
+                    </a>
+                </span>
+                ·
+                <span class="time">
+                    <abbr class="timeago">
+                        ${c.create_time}
+                    </abbr>
+                    &nbsp;
+                    <a href="javascript:void(0)" class="delete-comment" data-id="${c.id}" style="color:#FF6969"><i title="删除此评论" class="fa fa-trash"></i></a>
+                </span>
+                <span class="opts pull-right">
+                    <a title="回复此楼" class="btn-reply fa fa-mail-reply reply_to_this" data-name="${c.user_name}" href="#new_reply"></a>
+                </span>
+            </div>
+            <div class="markdown">
+                $${c.content}
+            </div>
+        </div>
+    </div>
+</script>
+
+<script src="/static/js/jquery.ui.widget.js"></script>
+<script src="/static/js/jquery.fileupload.js"></script>
+<script src="/static/js/jquery.iframe-transport.js"></script>
+<script src="/static/js/topic.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        APP.Topic.init("{{topic.id}}");
+    });
+</script>
+ 
+
+
+{(footer.html)}
+</body>
+</html>

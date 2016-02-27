@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OpenResty China 社区 &raquo; 注册</title>
+  {(meta.html)}
+</head>
+<body data-controller-name="sessions">
+{(header.html)}
+
+<div id="main" class="main-container container">
+    <div class="row" style="margin-top:60px;">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    注册新用户
+                </div>
+                <div class="panel-body">
+                    <form class="simple_form ">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="用户名" name="username">
+                        </div>
+
+                       
+                        <div class="form-group">
+                            <input class="form-control" placeholder="密码" type="password" name="password">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" placeholder="确认密码" type="password" name="password_confirm">
+                        </div>
+
+                        <div class="form-group">
+                            <a id="sign-up-btn" href="javascript:void(0);" class="btn btn-primary">提交注册信息</a>
+                            /
+                            <a class="btn btn-default" href="/auth/login">登录</a>
+                        </div>
+
+                        <div class="form-group" style="display:none;" id="tip">
+                            <div class="alert alert-danger"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+{(footer.html)}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#sign-up-btn").click(function(){
+            var username =$("input[name=username]").val();
+            var password = $("input[name=password]").val();
+            var password_confirm= $("input[name=password_confirm]").val();
+
+            $("#tip").hide();
+
+            var pattern = /^[A-Za-z][A-Za-z0-9_]+$/;
+            if(!username || username.length<4 || username.length>50 || !username.match(pattern)) {
+                $("#tip div").text("用户名为4~50位, 只能输入字母、下划线、数字，必须以字母开头.");
+                $("#tip").show();
+                return;
+            }
+
+            if(!password || password.length<6 || password.length>50){
+                $("#tip div").text("密码长度须为6~50位!");
+                $("#tip").show();
+                return;
+            }
+
+            if(password!==password_confirm){
+                $("#tip div").text("两次输入的密码不一样!");
+                $("#tip").show();
+                return;
+            }
+
+            $.ajax({
+                url : '/auth/sign_up',
+                type : 'post',
+                data : {
+                    username: username,
+                    password: hex_md5(password + APP.pwd_secret),
+                },
+                dataType : 'json',
+                success : function(result) {
+                    if(result.success){
+                        var count = 5;
+                        setInterval(function(){
+                            count = count - 1;
+                            $("#tip div").removeClass("alert-danger").addClass("alert-info").text("注册成功，将跳转至登录页面! "+count+"秒.");
+                            $("#tip").show();
+                            if(count==0){
+                                 window.location.href="/login";
+                            }
+                        }, 1000);
+                    }else{
+                        $("#tip div").text(result.msg);
+                        $("#tip").show();
+                    }
+                },
+                error : function() {
+                    $("#tip div").text("注册请求出错!");
+                    $("#tip").show();
+                }
+            });
+        })
+    });
+</script>
+
+</body>
+</html>

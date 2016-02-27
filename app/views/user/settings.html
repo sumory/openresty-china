@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OpenResty China 社区 &raquo; 个人设置</title>
+    {(meta.html)}
+    <link rel="stylesheet" media="screen" href="/static/css/jquery.fileupload.css"/>
+    <link rel="stylesheet" media="screen" href="/static/css/jquery.fileupload-ui.css"/>
+</head>
+<body>
+{(header.html)}
+
+<div id="main" class="main-container container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    个人资料设置
+                </div>
+                <div class="panel-body">
+                    <form class="simple_form form-horizontal" action="#">
+                        <div class="form-group string optional user_name">
+                            <label class="string optional control-label col-sm-2" for="user_name">
+                                用户名
+                            </label>
+                            <div class="col-sm-10">
+                                <span class="string optional form-control">{{user.username}}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group email optional user_email">
+                            <label class="email optional control-label col-sm-2" for="user_email">
+                                Email
+                            </label>
+                            <div class="col-sm-10">
+                                <input class="string email optional span4 form-control"
+                                type="email" value="{{user.email}}" name="email">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10 col-sm-offset-2">
+                                <div class="checkbox">
+                                    <label for="user_email_public" class="checkbox">
+                                        <input type="checkbox" value="0" 
+                                         {% if user.email_public==1 then %}
+                                            checked="checked" 
+                                         {% end %}
+                                        name="email_public" id="user_email_public">
+                                        公开 Email
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group string optional user_location">
+                            <label class="string optional control-label col-sm-2" for="user_location">
+                                城市
+                            </label>
+                            <div class="col-sm-10">
+                                <input class="string optional form-control" type="text" name="city" value={{user.city}}>
+                                <p class="help-block">
+                                    请用中文填写所在城市
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group string optional">
+                            <label class="string optional control-label col-sm-2" for="user_company">
+                                公司
+                            </label>
+                            <div class="col-sm-10">
+                                <input class="string optional form-control" type="text" value="{{user.company}}" name="company">
+                            </div>
+                        </div>
+                        <div class="form-group string optional">
+                            <label class="string optional control-label col-sm-2" for="user_github">
+                                Github
+                            </label>
+                            <div class="col-sm-10">
+                                <input class="string optional form-control" type="text" name="github"
+                                value="{{user.github}}">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group string optional user_website">
+                            <label class="string optional control-label col-sm-2" for="user_website">
+                                个人主页
+                            </label>
+                            <div class="col-sm-10">
+                                <input placeholder="http://" class="string optional form-control" type="text"
+                                value="{{user.website}}" name="website">
+                            </div>
+                        </div>
+                        <div class="form-group string optional user_tagline">
+                            <label class="string optional control-label col-sm-2" for="user_tagline">
+                                签名
+                            </label>
+                            <div class="col-sm-10">
+                                <input class="string optional form-control" type="text" name="sign" value="{{user.sign}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10 col-sm-offset-2">
+                                <a href="javascript:void(0);" class="btn btn-primary" id="edit-user-btn">
+                                    更新资料
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="display: none;" id="edit-user-result">
+                            <div class="col-sm-10 col-sm-offset-2">
+                                <div class="alert alert-danger" role="alert"></div>
+                            </div>
+                        </div>
+
+                        
+                    </form>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    修改头像和密码
+                </div>
+                <div class="panel-body">
+
+                 <div class="col-sm-12">
+                    <div class="col-sm-3">
+                        <form class="simple_form form-horizontal ">
+                            <div class="form-group file optional user_avatar">
+                                    <div class="row fileupload-buttonbar" style="padding-left:15px;">
+                                        <div class="thumbnail">
+                                            <img id="avatar_show" src="/static/avatar/{{user.avatar}}"/>
+                                            <div id="avatar_upload_progress_bar" class="progress progress-striped active" role="progressbar" aria-valuemin="10" aria-valuemax="100" aria-valuenow="0">
+                                                <div id="avatar_upload_progress" class="progress-bar progress-bar-success" style="width:0%;">
+                                                </div>
+                                            </div>
+                                            <div class="caption" align="center">
+                                                <span class="btn btn-primary fileinput-button">
+                                                    <span>上传</span>
+                                                    <input type="file" id="avatar_image" name="avatar_image" multiple="">
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div style="text-align: center;width: 100%;" id="upload_result_tip"></div>
+                                    </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-sm-1">
+                    </div>
+                    <div class="col-sm-8">
+                        <form class="simple_form form-horizontal">
+                            <input name="utf8" type="hidden" value="✓">
+                            <input type="hidden" name="_method" value="put">
+                            <input type="hidden" name="by" value="pwd">
+                            <div class="form-group password optional user_current_password">
+                                <label class="password optional control-label col-sm-2" for="user_current_password">
+                                    旧密码
+                                </label>
+                                <div class="col-sm-10">
+                                    <input class="password optional form-control" type="password" name="current_password">
+                                </div>
+                            </div>
+                            <div class="form-group password optional user_password">
+                                <label class="password optional control-label col-sm-2" for="user_password">
+                                    密码
+                                </label>
+                                <div class="col-sm-10">
+                                    <input class="password optional form-control" type="password" name="password">
+                                </div>
+                            </div>
+                            <div class="form-group password optional user_password_confirmation">
+                                <label class="password optional control-label col-sm-2" for="user_password_confirmation">
+                                    确认密码
+                                </label>
+                                <div class="col-sm-10">
+                                    <input class="password optional form-control" type="password" name="password_confirm">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-10 col-sm-offset-2">
+                                    <a href="javascript:void(0);" class="btn btn-success" id="edit-user-pwd-btn">修改密码</a>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display: none;" id="edit-user-pwd-result">
+                                <div class="col-sm-10 col-sm-offset-2">
+                                    <div class="alert alert-danger" role="alert"></div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+                    
+                </div>
+            </div>
+
+            
+            
+        </div>
+        <div class="sidebar col-md-3">
+            <div class="panel panel-default" style="text-align:center;">
+                <div class="panel-body">
+                    <img id="my_avatar" class="media-object avatar-96" src="/static/avatar/{{user.avatar}}">
+                </div>
+            </div>
+         
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    基本资料
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <span>注册时间: {{user.create_time}}</span>
+                    </div>
+                    
+                </div>
+            </div>
+            <!-- <div class="panel panel-default">
+                <div class="panel-heading">
+                    删除账号
+                </div>
+                <div class="panel-body">
+                    <form class="edit_user" id="edit_user" action="/account" accept-charset="UTF-8"
+                    method="post">
+                        <div class="form-group">
+                            <input class="form-control" placeholder="要删除账号，请输入你的密码" type="password"
+                            name="user[current_password]" id="user_current_password">
+                        </div>
+                        <input type="submit" name="commit" value="确定删除我的账号" class="btn btn-danger btn-sm btn-block"
+                        data-disable-with="正在提交">
+                    </form>
+                </div>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+
+<script src="/static/js/jquery.ui.widget.js"></script>
+<script src="/static/js/jquery.fileupload.js"></script>
+<script src="/static/js/jquery.iframe-transport.js"></script>
+<script src="/static/js/settings.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        APP.Common.resetNav();
+        APP.Settings.init();
+    });
+</script>
+ 
+
+
+{(footer.html)}
+</body>
+</html>

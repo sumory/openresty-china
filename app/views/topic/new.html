@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OpenResty China 社区 &raquo; 发布文章</title>
+  {(meta.html)}
+  <link rel="stylesheet" media="screen" href="/static/css/jquery.fileupload.css"/>
+    <link rel="stylesheet" media="screen" href="/static/css/jquery.fileupload-ui.css"/>
+</head>
+<body>
+{(header.html)}
+
+<div id="main" class="main-container container">
+    <div class="panel panel-default">
+        <div class="panel-heading">发布新文章</div>
+        <div class="panel-body">
+            <div class="simple_form form" id="new_topic">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-2">
+                            <div class="form-group">
+                                <select class="form-control" name="category">
+                                    <option value ="1">分享</option>
+                                    <option value ="2">问答</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-10">
+                            <input class="form-control" placeholder="在这里填写标题" type="text" name="title">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="editor-toolbar">
+                        <div class="opts pull-right"><!--上传文件-->
+                            <span class="fileinput-button">
+                                 <i class="fa fa-fa fa-image"></i>
+                                <input type="file" id="upload_image" multiple="">
+                            </span>
+                        </div>
+                        <ul class="nav nav-pills" style="clear:none;">
+                            <li class="edit active">
+                                <a id="reply-edit-btn" href="javascript:void(0);">编辑</a>
+                            </li>
+                            <li class="preview">
+                                <a id="reply-preview-btn" href="javascript:void(0);">预览</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <textarea class="topic-editor form-control closewarning" rows="20" name="content" id="edit-area"></textarea>
+                    <div class="markdown form-control" id="preview-area" style="display:none;height:auto;border:1px solid #ddd;padding:20px 20px;"></div>
+                    
+                </div>
+                <div class="form-group">
+                    <a id="commit" class="btn btn-primary col-xs-2">保存</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/jquery.ui.widget.js"></script>
+<script src="/static/js/jquery.fileupload.js"></script>
+<script src="/static/js/jquery.iframe-transport.js"></script>
+<script type="text/javascript">
+    function initEditComment(){
+        $("#reply-edit-btn").click(function(){
+            $(this).parent().addClass("active");
+            $("#reply-preview-btn").parent().removeClass("active");
+            $("#edit-area").show();
+            $("#preview-area").hide();
+        });
+
+        $("#reply-preview-btn").click(function(){
+            $(this).parent().addClass("active");
+            $("#reply-edit-btn").parent().removeClass("active");
+            var preview_content = APP.Common.md.render($("#edit-area").val());
+            $("#preview-area").html(preview_content);
+            emojify.run(document.getElementById('preview-area'));
+            $("#edit-area").hide();
+            $("#preview-area").show();
+        });
+    }
+
+    function initUploader() {
+        $("#upload_image").fileupload({  
+            url: '/upload/file',
+            sequentialUploads: true,
+            fail: function(e, data) {
+                APP.Common.showTipDialog("提示",'上传文件发生错误，只允许jpe/jpeg/png/gif/bmp文件，大小不超过2M.');
+            },
+        }).bind('fileuploadprogress', function (e, data) {  
+            var progress = parseInt(data.loaded / data.total * 100, 10);  
+            console.log(progress + '%');  
+        }).bind('fileuploaddone', function (e, data) { 
+            //console.dir(data.result)
+            var result = data.result || {};
+            if(result.success && result.filename){
+                var file_path = "/static/files/" + result.filename;
+                $("#edit-area").val($("#edit-area").val()+" !["+ result.originFilename +"](" + file_path +  ") ");
+            }else{
+                APP.Common.showTipDialog("提示",'上传文件失败'  + (result.msg?": "+result.msg:"")+ '，只允许jpe/jpeg/png/gif/bmp文件，大小不超过2M.');
+            }
+        });  
+    }
+
+    $(document).ready(function(){
+        initEditComment();
+        initUploader();
+
+        $("#commit").click(function(){
+            var category_id =$("select[name=category]").val();
+            var title = $("input[name=title]").val();
+            var content= $("textarea[name=content]").val();
+
+            if(!title || !content){
+                APP.Common.showTipDialog("提示", "请输入标题和内容");
+                return;
+            }
+
+            if(title.length>250||title.length<8 || content.length>5000 || content.length<20){
+                APP.Common.showTipDialog("提示", "标题长度须大于8小于250，内容长度须大于20小于5000");
+                return;
+            }
+
+            $.ajax({
+                url : '/topic/new',
+                type : 'post',
+                data : {
+                    title: title,
+                    category_id: category_id,
+                    content: content
+                },
+                dataType : 'json',
+                success : function(result) {
+                    if(result.success){
+                        window.location.href="/topic/"+result.data.id+"/view";
+                    }else{
+                        APP.Common.showTipDialog("提示", result.msg);
+                    }
+                },
+                error : function() {
+                    APP.Common.showTipDialog("提示", "新建文章请求发生异常");
+                }
+            });
+        });
+    });
+</script>
+
+{(footer.html)}
+</body>
+</html>

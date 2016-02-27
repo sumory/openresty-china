@@ -1,0 +1,2 @@
+https://github.com/bungle/lua-resty-uuid
+依赖于libuuid，请参考以上地址在宿主机上安装这个库

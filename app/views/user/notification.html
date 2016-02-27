@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OpenResty China 社区 &raquo; 通知</title>
+  {(meta.html)}
+</head>
+<body>
+{(header.html)}
+
+<div id="main" class="main-container container">
+    <div id="notifications" class="panel panel-default">
+        <div class="tools panel-heading">
+            <div class="pull-left">
+                <h4>通知提醒</h4>
+            </div>
+            <div class="pull-right">
+                <a class="btn btn-danger" rel="nofollow" href="javascript:void(0);" id="delete-all-btn">
+                    <i class="fa fa-fa fa-trash"></i>
+                    <span>全部删除</span>
+                </a>
+                <a class="btn btn-info" rel="nofollow" href="javascript:void(0);" id="mark-btn">
+                    <i class="fa fa-fa fa-check"></i>
+                    <span>全部标记为已读</span>
+                </a>
+                <a class="btn btn-warning" href="javascript:void(0);" id="unread-btn">
+                    <i class="fa fa-fa fa-filter"></i>
+                    <span>未读</span>
+                </a>
+            </div> 
+        </div>
+        <div class="panel-body" id="notifications-body">
+        </div>
+        <div class="panel-footer" id="pagebar">
+        </div>
+    </div>
+</div>
+
+ 
+{(footer.html)}
+
+
+<script id="notification-item-tpl" type="text/template">
+{@each notifications as n, index}
+   <div class="media notification {@if n.status == 0} not-mark {@/if}" id="notification-${n.id}" >
+        <div class="media-left avatar">
+            <a href="/user/${n.username}/index">
+                <img class="media-object avatar-48" src="/static/avatar/${n.avatar}">
+            </a>
+        </div>
+        <div class="media-body">
+            <div class="media-heading">
+                <span class="user">
+                    <a href="/user/${n.username}/index">
+                        ${n.username}
+                    </a>
+                </span>
+
+                
+
+                {@if n.type == 0}
+                    <span class="info">
+                        评论了你的文章 &nbsp;
+                        <a title="${n.topic_title}" href="/topic/${n.topic_id}/view">
+                            ${n.topic_title}
+                        </a>
+                    </span>
+                {@/if}
+
+                {@if n.type == 1}
+                    <span class="info">
+                        在文章
+                        <a title="${n.topic_title}" href="/topic/${n.topic_id}/view">${n.topic_title}</a>
+                        评论中提及了你：
+                    </span>
+                {@/if}
+
+           
+   
+                <span class="date pull-right">
+                    <i class="fa fa-clock-o">
+                    </i>
+                    <abbr class="timeago" title="${n.create_time}">
+                        ${n.create_time}
+                    </abbr>
+                </span>
+            </div>
+
+            {@if n.type == 2}
+                ${n.username} 关注了你
+            {@/if}
+
+            {@if n.type == 0 || n.type == 1}
+                <div class="summary markdown" id="comment-${n.comment_id}">
+                    {@if !n.comment_content}
+                        <del>此条评论已被删除</del>
+                    {@/if}
+
+                    {@if n.comment_content}
+                        $${n.comment_content}
+                    {@/if}
+                </div>
+            {@/if}
+
+            
+        </div>
+        <div class="media-right opts">
+            <a class="delete-notification" rel="nofollow" data-id="${n.id}" href="javascript:void(0);">
+                <i class="fa fa-trash"></i>
+            </a>
+        </div>
+    </div>
+{@/each}
+</script>
+
+<script src="/static/js/notification.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+           APP.Notification.init();
+    });
+</script>
+</body>
+</html>
