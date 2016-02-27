@@ -19,7 +19,7 @@
 - 将仓库中提供的[sql文件](install/blog.sql)导入到MySQL
 - 修改配置文件`app/config/config.lua`为本地对应配置，强烈建议将以下值修改为不同配置
 	- session_secret 用于session加密
-	- pwd_secret 用户数据库密码存储是加密
+	- pwd_secret 用户数据库密码存储时加密
 - 配置静态文件目录，这个目录用于存放用户上传的头像、文章图片、评论图片等
 	- 默认的目录为/data/openresty-china/static，请在本地新建此目录，并保证该目录有供应用访问和修改的权限
 	- 若要修改上述默认目录，请修改app/config/config.lua中的upload_config.dir和nginx配置文件中的$static_files_path的值，保证两个值一致
