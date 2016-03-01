@@ -21,8 +21,9 @@ function topic_model:new(title, content, user_id, user_name, category_id)
 end
 
 function topic_model:update(topic_id, title, content, user_id, category_id)
-    return db:query("update topic set title=?, content=?, category_id=? where id=? and user_id=?",
-            {title, content,  tonumber(category_id), tonumber(topic_id), tonumber(user_id)})
+	local now = utils.now()
+    return db:query("update topic set title=?, content=?, category_id=?, update_time=? where id=? and user_id=?",
+            {title, content,  tonumber(category_id), now, tonumber(topic_id), tonumber(user_id)})
 end
 
 function topic_model:get_my_topic(user_id, id)
