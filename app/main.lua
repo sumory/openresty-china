@@ -1,6 +1,8 @@
 local sfind = string.find
 local lor = require("lor.index")
 local config = require("app.config.config")
+local reponse_time_middleware = require("app.middleware.response_time")
+local powered_by_middleware = require("app.middleware.powered_by")
 local session_middleware = require("lor.lib.middleware.session")
 local check_login_middleware = require("app.middleware.check_login")
 local uploader_middleware = require("app.middleware.uploader")
@@ -15,15 +17,18 @@ app:conf("view engine", view_config.engine)
 app:conf("view ext", view_config.ext)
 app:conf("views", view_config.views)
 
+app:use(reponse_time_middleware({
+    digits = 0,
+    header = 'X-Response-Time',
+    suffix = true
+}))
+
 app:use(session_middleware({
     secret = config.session_secret -- 必须修改此值
 }))
 
 -- filter: add response header
-app:use(function(req, res, next)
-    res:set_header('X-Powered-By', 'Lor Framework')
-    next()
-end)
+app:use(powered_by_middleware('Lor Framework'))
 
 -- intercepter: login or not
 app:use(check_login_middleware(whitelist))

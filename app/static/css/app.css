@@ -1,3 +1,17 @@
+#response-time-area {
+	margin-top: 5px;
+    position: fixed;
+    width: 70px;
+    top: 70px;
+    left: 10px;
+    color: #bbb;
+    font-size: 12px;
+}
+#response-time-area p{
+	margin-bottom:2px;
+}
+
+
 .not-mark{
 	background-color: #F7F6E3;
 }
