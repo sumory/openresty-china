@@ -28,7 +28,7 @@
         
         $("#response-time-area").append('<p id="'+ show_id +'">'+ xhr.getResponseHeader('X-Response-Time')+"</p>");
         $("#" + show_id).fadeOut(3000,function(){
-            $(this).remome();
+            $(this).remove();
         });
     });
 </script>
