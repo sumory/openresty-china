@@ -89,6 +89,14 @@
                             <!--右侧操作区域-->
                         </div>
                         <hr>
+
+                        <div class="group" style="height:30px;margin-left: 60px;">
+                            <!-- share Button BEGIN -->
+                            <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a><a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a><a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a></div>
+                            
+                            <!-- share Button END -->
+                        </div>
+                        <hr>
                         <div class="reply-buttons">
                             <div class="total">
                                 共收到
@@ -297,6 +305,8 @@
     </div>
 </script>
 
+{(footer.html)}
+
 <script src="/static/js/jquery.ui.widget.js"></script>
 <script src="/static/js/jquery.fileupload.js"></script>
 <script src="/static/js/jquery.iframe-transport.js"></script>
@@ -306,9 +316,9 @@
         APP.Topic.init("{{topic.id}}");
     });
 </script>
- 
 
+<!-- share buttons -->
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
 
-{(footer.html)}
 </body>
 </html>

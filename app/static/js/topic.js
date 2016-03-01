@@ -29,12 +29,12 @@
 			            var tpl2 = $("#ops-area-tpl").html();
 			            var html2 = juicer(tpl2, result.data);
 			            $("#ops-area").html(html2);
-			            
 
 			            _this.loadComments();
         				_this.initEvents();
 
         				emojify.run(document.getElementById('article-content'));
+        				$("title").append(" "+result.data.topic.title);
 	                }else{
 	                    L.Common.showTipDialog("提示", result.msg);
 	                }
