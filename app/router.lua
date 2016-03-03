@@ -9,8 +9,6 @@ local upload_router = require("app.routes.upload")
 local category_router = require("app.routes.category")
 local notification_router = require("app.routes.notification")
 local error_router = require("app.routes.error")
-local multi_router = require("app.routes.multi")
-local multi_router2 = require("app.routes.multi")
 
 return function(app)
     app:use("/auth", auth_router())
@@ -33,7 +31,5 @@ return function(app)
     app:get("/settings", common_router.settings)
     app:get("/about", common_router.about)
 
-    app:use("/m1", multi_router())
-    app:use("/m2", multi_router2())
 end
 
