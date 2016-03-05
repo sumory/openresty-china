@@ -4,7 +4,7 @@ local uuid = require("app.libs.uuid.uuid")
 local sfind = string.find
 local match = string.match
 local ngx_var = ngx.var
-local get_headers = ngx.req.get_headers()
+
 
 
 local function getextension(filename)
@@ -13,13 +13,14 @@ end
 
 
 local function _multipart_formdata(config)
+
 	local form, err = upload:new(config.chunk_size)
 	if not form then
 		ngx.log(ngx.ERR, "failed to new upload: ", err)
 		ngx.exit(500)
 	end
 	form:set_timeout(config.recieve_timeout)
-		
+	
 
 	local unique_name = uuid()
 	local success, msg = false, ""
@@ -59,6 +60,7 @@ local function _multipart_formdata(config)
 			
 				
 				file, err = io.open(path, "w+")
+
 				if err then
 					success = false
 					msg = "open file error"
@@ -90,52 +92,46 @@ local function _multipart_formdata(config)
 	return success, msg, origin_filename, extname, path, filename
 end
 
-local function _check_post(config)
-	local filename = nil
-	local extname = nil
-	local path = nil
 
-
-	local success, msg = false, ""
-	local origin_filename, extname, path, filename
-	if ngx_var.request_method == "POST" then
-		local header = get_headers['Content-Type']
-
-		if header then
-			local is_multipart = sfind(header, "multipart")
-
-			if is_multipart and is_multipart>0 then
-				success, msg, origin_filename, extname, path, filename= _multipart_formdata(config)
-
-			end
-		end
-	end
-
-
-	return success, msg, origin_filename, extname, path, filename
-end
 
 local function uploader(config)
-	config = config or {}
-	config.dir = config.dir or "/tmp"
-	config.chunk_size = config.chunk_size or 4096
-	config.recieve_timeout = config.recieve_timeout or 20000 -- 20s
-
 	return function(req, res, next)
-		local success, msg, origin_filename, extname, path, filename = _check_post(config)
-		if success then
-			req.file = req.file or {}
-			req.file.success = true
-			req.file.origin_filename = origin_filename
-			req.file.extname = extname
-			req.file.path = path
-			req.file.filename = filename
+
+		if ngx_var.request_method == "POST" then
+			local get_headers = ngx.req.get_headers()
+			local header = get_headers['Content-Type']
+			if header then
+				local is_multipart = sfind(header, "multipart")
+				if is_multipart and is_multipart>0 then
+					config = config or {}
+					config.dir = config.dir or "/tmp"
+					config.chunk_size = config.chunk_size or 4096
+					config.recieve_timeout = config.recieve_timeout or 20000 -- 20s
+					
+					local success, msg, origin_filename, extname, path, filename = _multipart_formdata(config)
+					if success then
+						req.file = req.file or {}
+						req.file.success = true
+						req.file.origin_filename = origin_filename
+						req.file.extname = extname
+						req.file.path = path
+						req.file.filename = filename
+					else
+						req.file = req.file or {}
+						req.file.success = false
+						req.file.msg = msg
+					end
+					next()
+					
+				else
+					next()
+				end
+			else
+				next()
+			end
 		else
-			req.file = req.file or {}
-			req.file.success = false
-			req.file.msg = msg
+			next()
 		end
-		next()
 	end
 end
 

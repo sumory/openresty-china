@@ -9,8 +9,9 @@ local upload_router = lor:Router()
 
 upload_router:post("/avatar", function(req, res, next)
     local file = req.file or {}
+    local userid = req.session.get("user").userid;
+    
     if file.success and file.filename then 
-        local userid = req.session.get("user").userid;
         user_model:update_avatar(userid, file.filename)
 
         ngx.log(ngx.ERR, "用户:", userid, " 上传头像:", file.filename, " 成功")
