@@ -23,13 +23,13 @@
 <script type="text/javascript">
     APP.Common.findUnreadMsg();
 
-    $(document).ajaxComplete(function( event, xhr, settings ) {
-        var show_id = 'response-time-show-' + $.now();
+    // $(document).ajaxComplete(function( event, xhr, settings ) {
+    //     var show_id = 'response-time-show-' + $.now();
         
-        $("#response-time-area").append('<p id="'+ show_id +'">'+ xhr.getResponseHeader('X-Response-Time')+"</p>");
-        $("#" + show_id).fadeOut(3000,function(){
-            $(this).remove();
-        });
-    });
+    //     $("#response-time-area").append('<p id="'+ show_id +'">'+ xhr.getResponseHeader('X-Response-Time')+"</p>");
+    //     $("#" + show_id).fadeOut(3000,function(){
+    //         $(this).remove();
+    //     });
+    // });
 </script>
 {% end %}

@@ -13,6 +13,7 @@ local upload_config = config.upload_config
 
 local app = lor()
 
+app:conf("view enable", true)
 app:conf("view engine", view_config.engine)
 app:conf("view ext", view_config.ext)
 app:conf("views", view_config.views)
