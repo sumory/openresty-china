@@ -1,6 +1,7 @@
 local pairs = pairs
 local ipairs = ipairs
 local smatch = string.match
+local slower = string.lower
 local ssub = string.sub
 local slen = string.len
 local cjson = require("cjson")
@@ -71,6 +72,7 @@ auth_router:post("/sign_up", function(req, res, next)
     else
         password = utils.encode(password .. "#" .. pwd_secret)
         local avatar = ssub(username, 1, 1) .. ".png" --取首字母作为默认头像名
+        avatar = slower(avatar)
         local result, err = user_model:new(username, password, avatar)
         if result and not err then
             return res:json({
