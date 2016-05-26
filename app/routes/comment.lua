@@ -29,9 +29,24 @@ comment_router:get("/:comment_id/delete", function(req, res, next)
         })
     end
 
+    local comment = comment_model:query(comment_id)
     local result = comment_model:delete(userid, comment_id)
 
     if result then
+
+        -- 重置评论所属的文章的评论数和最后回复等信息
+        if comment and comment.topic_id ~=0 then
+            local topic_id = comment.topic_id
+            comment_model:reset_topic_comment_num(topic_id)
+
+            local last_reply = comment_model:get_last_reply_of_topic(topic_id)
+            if last_reply and last_reply.user_id~=0 then
+                topic_model:reset_last_reply(topic_id, last_reply.user_id, last_reply.user_name, last_reply.create_time) -- 更新最后回复人
+            else
+                topic_model:reset_last_reply(topic_id, 0, "", "1970-01-01 00:00:00") -- 更新最后回复人
+            end
+        end
+
         res:json({
             success = true,
             msg = "删除评论成功"
@@ -89,7 +104,12 @@ comment_router:post("/new", function(req, res, next)
     else
         local new_comment_id = result.insert_id
         comment_model:reset_topic_comment_num(topic_id)
-        topic_model:reset_last_reply(topic_id, user_id, user.username) -- 更新最后回复人
+
+        local last_reply = comment_model:get_last_reply_of_topic(topic_id)
+        if last_reply and last_reply.user_id~=0 then
+            topic_model:reset_last_reply(topic_id, last_reply.user_id, last_reply.user_name, last_reply.create_time) -- 更新最后回复人
+        end
+
         local new_comment =  comment_model:query(new_comment_id)
 
         -- 给评论涉及者发通知

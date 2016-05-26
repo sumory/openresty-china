@@ -18,6 +18,11 @@ function DB:new(conf)
 end
 
 function DB:exec(sql)
+    if not sql then
+        ngx.log(ngx.ERR, "sql parse error! please check")
+        return nil, "sql parse error! please check"
+    end
+
     local conf = self.conf
     local db, err = mysql:new()
     if not db then

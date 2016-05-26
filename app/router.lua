@@ -10,6 +10,8 @@ local category_router = require("app.routes.category")
 local notification_router = require("app.routes.notification")
 local error_router = require("app.routes.error")
 
+
+
 return function(app)
     app:use("/auth", auth_router())
     app:use("/error", error_router())
@@ -30,6 +32,7 @@ return function(app)
     app:get("/ask", common_router.ask)
     app:get("/settings", common_router.settings)
     app:get("/about", common_router.about)
+
 
 end
 

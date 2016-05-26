@@ -37,6 +37,25 @@ function comment_model:query(comment_id)
 	end
 end
 
+function comment_model:get_last_reply_of_topic(topic_id)
+	topic_id = tonumber(topic_id)
+	if not topic_id or topic_id == 0 then
+		return {}
+	end
+
+	local res, err = db:query("select c.*, u.username as user_name, u.id as user_id from comment c " ..
+		" left join user u on c.user_id=u.id " .. 
+		" where c.topic_id=? order by c.id desc limit 1",
+		{topic_id})
+
+
+	if not res or err or type(res) ~= "table" or #res <= 0 then
+		return {}
+	else
+		return res[1]
+	end
+end
+
 
 function comment_model:get_all_of_user(user_id, page_no, page_size)
 	page_no = tonumber(page_no)

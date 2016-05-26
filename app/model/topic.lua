@@ -255,10 +255,9 @@ function topic_model:get_total_like_count_of_user(user_id)
 end
 
 
-function topic_model:reset_last_reply(topic_id, user_id, user_name) -- 更新最后回复人
-	local now = utils.now()
+function topic_model:reset_last_reply(topic_id, user_id, user_name, last_reply_time) -- 更新最后回复人
 	db:query("update topic set last_reply_id=?, last_reply_name=?, last_reply_time=? where id=?", 
-		{tonumber(topic_id), user_name, now, tonumber(topic_id)})
+		{tonumber(user_id), user_name, last_reply_time, tonumber(topic_id)})
 end
 
 return topic_model
