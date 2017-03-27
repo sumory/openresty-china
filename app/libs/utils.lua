@@ -80,7 +80,7 @@ function _M.days_after_registry(req)
 
     if req and req.session then
         local user = req.session.get("user")
-        local create_time = user.create_time
+        local create_time = user and user.create_time
         if create_time then
             local now = date() -- seconds
             create_time = date(create_time)
