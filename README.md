@@ -12,9 +12,9 @@
 
 ### 安装
 
-- 首先安装OpenResty、luajit和[lor](https://github.com/sumory/lor)框架，安装成功的标志是以下三个命令可以正常输出
+- 首先安装OpenResty和[lor](https://github.com/sumory/lor)框架，安装成功的标志是以下三个命令可以正常输出
 	- nginx -v
-	- luajit -v
+	- resty -v
 	- lord -v
 - 将仓库中提供的[sql文件](install/blog.sql)导入到MySQL
 - 修改配置文件`app/config/config.lua`为本地对应配置，强烈建议将以下值修改为不同配置
@@ -31,7 +31,7 @@
 
 ### 讨论交流
 
-目前有一个QQ群用于在线讨论：[![QQ群522410959](http://pub.idqqimg.com/wpa/images/group.png)](http://shang.qq.com/wpa/qunwpa?idkey=b930a7ba4ac2ecac927cb51101ff26de1170c0d0a31c554b5383e9e8de004834) 522410959
+关于Lor框架和OpenResty-China的更多问题，可加入QQ群在线讨论：522410959
 
 
 ### License
