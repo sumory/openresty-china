@@ -6,7 +6,6 @@ local topic_model = require("app.model.topic")
 local collect_model = require("app.model.collect")
 local like_model = require("app.model.like")
 local topic_router = lor:Router()
-local debug = require("lor.lib.debug")
 
 local function isself(req, uid)
     local result = false
