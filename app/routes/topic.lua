@@ -6,6 +6,7 @@ local topic_model = require("app.model.topic")
 local collect_model = require("app.model.collect")
 local like_model = require("app.model.like")
 local topic_router = lor:Router()
+local debug = require("lor.lib.debug")
 
 local function isself(req, uid)
     local result = false
@@ -73,15 +74,19 @@ topic_router:get("/:topic_id/query", function(req, res, next)
             msg = "要查询的文章id参数不能为空."
         })
     end
+	
+	local is_collect = false
+	local is_like = false
+	local is_self = false
+	
+	if nil ~= req.session.get("user") then
+		local current_userid = req.session.get("user").userid
 
-    local current_userid = req.session.get("user").userid
-    local is_collect = false
-    local is_like = false
-
-    if current_userid and current_userid ~= 0 then
-        is_collect = collect_model:is_collect(current_userid, topic_id)
-        is_like = like_model:is_like(current_userid, topic_id)
-    end
+		if current_userid and current_userid ~= 0 then
+			is_collect = collect_model:is_collect(current_userid, topic_id)
+			is_like = like_model:is_like(current_userid, topic_id)
+		end
+	end
 
     -- topic_id must be number
     local result, err = topic_model:get(topic_id)
@@ -93,7 +98,7 @@ topic_router:get("/:topic_id/query", function(req, res, next)
         })
     else
         local topic = result[1]
-        local is_self = isself(req, topic.user_id)
+        is_self = isself(req, topic.user_id)
         res:json({
             success = true,
             data = {
