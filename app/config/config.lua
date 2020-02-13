@@ -49,7 +49,7 @@ return {
 	-- ########################## 以下配置需要使用者自定义为本地需要的配置 ########################## --
 
 	-- 生成session的secret，请一定要修改此值为一复杂的字符串，用于加密session
-	session_secret = "3584827dfed45b40328acb6242bdf13b",
+	session_secret = "12345678", -- lua-resty-string: salt must be 8 characters or nil
 
 	-- 用于存储密码的盐，请一定要修改此值, 一旦使用不能修改，用户也可自行实现其他密码方案
 	pwd_secret = "salt_secret_for_password", 
