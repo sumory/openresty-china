@@ -1,0 +1,28 @@
+version: '2'
+
+services:
+    ormysql:
+        image: mysql:5
+        restart: always
+        container_name: ormysql
+        environment:
+        - MYSQL_ROOT_PASSWORD=ormysqlroot
+        - MYSQL_DATABASE=orchina
+        - MYSQL_USER=orchina
+        - MYSQL_PASSWORD=orchina
+        volumes:
+        - ../ormysql/:/var/lib/mysql
+
+    orchina:
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        container_name: orchina
+        ports:
+        - "2606:8888"
+        volumes:
+        - /etc/localtime:/etc/localtime:ro
+        - /etc/timezone:/etc/timezone:ro
+        - ../upload:/data/openresty-china/static
+        - ../logs:/orchina/logs
+
