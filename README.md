@@ -10,6 +10,13 @@
 ![首页](./docs/index.jpg)
 
 
+### 采用 Docker 运行
+
+```bash
+$ docker-composer up --build -d
+$ docker-compose run orchina /init.sh
+```
+
 ### 安装
 
 - 首先安装OpenResty和[lor](https://github.com/sumory/lor)框架，安装成功的标志是以下三个命令可以正常输出
